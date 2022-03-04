@@ -2,6 +2,8 @@
 
 namespace App\Services\Telegram\Commands;
 
+use App\Models\DrgPeople;
+use App\Services\Drg\SearchDrgService;
 use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\Pure;
@@ -14,6 +16,8 @@ use Whoops\Handler\PlainTextHandler;
 
 class TextHandler extends UpdateHandler
 {
+
+
     /**
      * @throws Throwable
      */
@@ -27,7 +31,46 @@ class TextHandler extends UpdateHandler
             ]
         ]);
 
+        $result = SearchDrgService::find($this->update->message->text);
 
+
+        /**
+         * @var $item DrgPeople
+         */
+        foreach ($result['drg_people'] as $item) {
+            $phones = json_decode($item->phones);
+            $str_phones = implode(' ; ', (array)$phones);
+            $text = "Ім'я (ru): $item->name_ru,\n" .
+                "Ім'я (lt): $item->name_lt,\n" .
+                "Паспорт: $item->passport,\n" .
+                "Дата народження: $item->date_of_birthday,\n" .
+                "Адреса: $item->address,\n" .
+                "Телефони: $str_phones,\n
+             ";
+
+            if ($item->photo){
+                $text.="<a href='" . asset($item->photo)."'> ‏ </a>";
+            }
+
+            $this->sendMessage([
+                'text' => $text,
+                'reply_markup' => [
+                    'remove_keyboard' => true
+                ],
+                'parse_mode' => 'HTML',
+                'disable_web_page_preview' => false,
+            ]);
+        }
+        if (empty($result['drg_people'])){
+            $this->sendMessage([
+                'text' => "Нажаль, нічого не знайдено",
+                'reply_markup' => [
+                    'remove_keyboard' => true
+                ],
+                'parse_mode' => 'HTML',
+                'disable_web_page_preview' => false,
+            ]);
+        }
 
     }
 

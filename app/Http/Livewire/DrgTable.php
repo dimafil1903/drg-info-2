@@ -28,7 +28,7 @@ class DrgTable extends TableComponent
 
             Column::make("Паспорт Id", 'passport_id')->searchable()->sortable(),
             Column::make("Адреса", 'address')->searchable()->sortable(),
-            Column::make("phones", 'phones')->searchable()->sortable(),
+            Column::make("phones", 'phones')->view('components.phones')->searchable(),
 
             Column::make("Фото", 'photo')->view('components.image'),
 

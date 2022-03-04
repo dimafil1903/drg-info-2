@@ -22,13 +22,16 @@ class DrgPeopleController extends Controller
     public function store(StoreDrgPeopleRequest $request)
     {
         $validated = $request->validated();
-
         if (isset($validated['photo'])) {
             $randomize = rand(111111, 999999);
             $extension = $validated['photo']->getClientOriginalExtension();
             $filename = $randomize . '.' . $extension;
-            $image =  $validated['photo']->move('images/drg/', $filename);
+            $image = $validated['photo']->move('images/drg/', $filename);
             $validated['photo'] = $image;
+        }
+
+        if (isset($validated['phones'])) {
+            $validated['phones'] = json_encode($validated['phones']);
         }
         DrgPeople::create($validated);
         return redirect()->back()->with(['status' => true]);

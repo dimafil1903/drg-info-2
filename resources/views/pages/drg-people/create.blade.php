@@ -54,6 +54,37 @@
 
             <x-textarea class="form-control" name="address"/>
         </div>
+
+        <div class="col-auto mb-3 row">
+            <div class="col-6">
+                Номера телефонів
+                <label for="passport_id" class="visually-hidden">Телефон</label>
+                <input type="text" class="form-control" name="phones[0]" wire:model="phone.0" placeholder="Телефон">
+                @error('username.0') <span class="text-danger error">{{ $message }}</span>@enderror
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary mt-4" wire:click.prevent="add({{$i}})">+
+                </button>
+            </div>
+        </div>
+
+        {{-- Add Form --}}
+
+        @foreach ($inputs as $key => $value)
+            <div class="col-auto mb-3 row">
+                <div class="col-6">
+                    <label class="visually-hidden">Телефон</label>
+                    <input type="text" class="form-control" name="phones[{{$value}}]" wire:model="phone.{{ $value }}"
+                           placeholder="Телефон">
+                    @error('username.') <span class="text-danger error">{{ $message }}</span>@enderror
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-light mt-1" wire:click.prevent="remove({{$key}})"> -
+                    </button>
+                </div>
+            </div>
+        @endforeach
+
         <div class="col-auto mb-3">
             <button type="submit" style="background-color: royalblue" class="btn btn-primary mb-3">
                 Додати урода до бази даних
@@ -61,3 +92,4 @@
         </div>
     </x-form>
 </div>
+

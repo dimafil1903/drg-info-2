@@ -1,25 +1,34 @@
 <?php
 
+namespace App\Services\Drg;
+
+use App\Models\DrgPeople;
+use Illuminate\Support\Collection;
+use JetBrains\PhpStorm\ArrayShape;
+
 class SearchDrgService
 {
 
-    public function find($text)
+    #[ArrayShape(['drg_people' => "mixed", 'cars' => "array"])]
+    public static function find($text): array
     {
 
+
+        $drgPeople = DrgPeople::whereRaw('LOWER(name_ru) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->orWhereRaw('LOWER(name_lt) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->orWhereRaw('LOWER(date_of_birthday) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->orWhereRaw('LOWER(passport) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->orWhereRaw('LOWER(passport_id) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->orWhereRaw('LOWER(address) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->orWhereRaw('LOWER(phones) like ?', array('%' . mb_strtolower($text) . '%'))->limit(10)->get();
+
+
+        return [
+            'drg_people' => $drgPeople,
+            'cars' => [],
+        ];
+
     }
 
-
-    private function findByName(){
-
-    }
-    private function findByPhone(){
-
-    }
-    private function findByPassport(){
-
-    }
-    private function findByCarNumber(){
-
-    }
 
 }

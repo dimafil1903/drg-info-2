@@ -33,7 +33,7 @@ class StoreDrgPeopleRequest extends FormRequest
             'passport' => ['nullable', 'string'],
             'passport_id' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
-            'phones' => ['nullable'],
+            'phones' => ['required','array'],
             'photo' => ['nullable', 'image'],
         ];
     }
