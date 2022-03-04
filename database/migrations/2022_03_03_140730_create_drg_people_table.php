@@ -18,7 +18,7 @@ class CreateDrgPeopleTable extends Migration
             $table->string('passport_id')->nullable();
             $table->string('photo')->nullable();
             $table->text('address')->nullable();
-            $table->jsonb('phones')->nullable();
+            $table->text('phones')->nullable();
 
             //
 
