@@ -49,17 +49,25 @@ class TextHandler extends UpdateHandler
              ";
 
             if ($item->photo){
-                $text.="<a href='" . asset($item->photo)."'> ‏ </a>";
-            }
+//                $text.="<a href='" . asset($item->photo)."'> ‏ </a>";
+                $this->sendPhoto([
+                    'photo' => asset($item->photo),
+                    'caption' => $text,
 
-            $this->sendMessage([
-                'text' => $text,
-                'reply_markup' => [
-                    'remove_keyboard' => true
-                ],
-                'parse_mode' => 'HTML',
-                'disable_web_page_preview' => false,
-            ]);
+                    'reply_markup' => [
+                        'remove_keyboard' => true
+                    ],
+                ]);
+            }else{
+                $this->sendMessage([
+                    'text' => $text,
+                    'reply_markup' => [
+                        'remove_keyboard' => true
+                    ],
+                    'parse_mode' => 'HTML',
+                    'disable_web_page_preview' => false,
+                ]);
+            }
         }
         if (empty($result['drg_people'])){
             $this->sendMessage([
