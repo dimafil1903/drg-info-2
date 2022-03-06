@@ -45,5 +45,9 @@ class TelegramUser extends Model
         'location',
         'enabled'
     ];
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i',
+        'updated_at' => 'datetime:Y-m-d H:i',
+    ];
 
 }

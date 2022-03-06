@@ -18,9 +18,6 @@ class StartCommand extends CommandHandler
     public function handle()
     {
 
-
-        Log::info("HI", (array)$this->getWebhookInfo());
-
         $this->sendMessage([
             'text' => 'Слава Україні!',
             'reply_markup' => [

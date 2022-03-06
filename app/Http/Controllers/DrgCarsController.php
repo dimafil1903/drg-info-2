@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDrgCarRequest;
+use App\Models\DrgCar;
 use Illuminate\Http\Request;
 
 class DrgCarsController extends Controller
@@ -16,9 +18,23 @@ class DrgCarsController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(StoreDrgCarRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['number'] = $validated['left_letters'] . $validated['number'] . $validated['right_letters'];
+
+        if (isset($validated['photo'])) {
+            $randomize = time() . rand(111111, 999999);
+            $extension = $validated['photo']->getClientOriginalExtension();
+            $filename = $randomize . '.' . $extension;
+            $image = $validated['photo']->move('images/drg-cars/', $filename);
+            $validated['photo'] = $image;
+        }
+        DrgCar::create($validated);
+
+
+        return redirect()->back()->with(['status' => true]);
+
     }
 
     public function show($id)

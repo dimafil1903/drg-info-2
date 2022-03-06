@@ -16,6 +16,12 @@ trait TelegramService
     }
 
 
+    public function checkIfBanned(): bool
+    {
+        return TelegramUser::where('user_id', $this->update->user()->id)->where('enabled', false)->exists();
+    }
+
+
     public function answerNeedToRegister(): bool
     {
         $this->sendMessage([
@@ -27,6 +33,16 @@ trait TelegramService
         return true;
     }
 
+    public function answerThatBanned(): bool
+    {
+        $this->sendMessage([
+            'text' => 'Схоже ви більше не можете користуватися ботом, бо ви в бані!',
+            'reply_markup' => [
+                'remove_keyboard' => true
+            ],
+        ]);
+        return true;
+    }
     public function createTgUser()
     {
         TelegramUser::create([
@@ -38,7 +54,8 @@ trait TelegramService
         ]);
     }
 
-    public function sendNothingFound(){
+    public function sendNothingFound()
+    {
         $this->sendMessage([
             'text' => "Нажаль, нічого не знайдено",
             'reply_markup' => [

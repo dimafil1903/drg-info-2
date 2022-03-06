@@ -30,6 +30,9 @@ class TextHandler extends UpdateHandler
     public function handle(): bool
     {
 
+        if ($this->checkIfBanned()) {
+            return $this->answerThatBanned();
+        }
         if (!$this->checkIfRegister()) {
             return $this->answerNeedToRegister();
         }

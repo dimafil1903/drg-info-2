@@ -23,7 +23,7 @@ class DrgPeopleController extends Controller
     {
         $validated = $request->validated();
         if (isset($validated['photo'])) {
-            $randomize = rand(111111, 999999);
+            $randomize = time().rand(111111, 999999);
             $extension = $validated['photo']->getClientOriginalExtension();
             $filename = $randomize . '.' . $extension;
             $image = $validated['photo']->move('images/drg/', $filename);
