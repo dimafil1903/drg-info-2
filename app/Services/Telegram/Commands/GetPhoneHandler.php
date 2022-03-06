@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Services\Telegram\Messages\StaticHelper;
+use App\Services\Telegram\TelegramService;
 use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\Pure;
@@ -14,6 +15,8 @@ use WeStacks\TeleBot\TeleBot;
 
 class GetPhoneHandler extends UpdateHandler
 {
+    use TelegramService;
+
     /**
      * @throws Throwable
      */
@@ -21,21 +24,21 @@ class GetPhoneHandler extends UpdateHandler
     {
 
 
-        Log::info("HI", (array)$this->getWebhookInfo());
-
+        if (!$this->checkIfRegister()) {
+            $this->createTgUser();
+        }
         $this->sendMessage(Keyboards::clearKeyboard('Героям слава!'));
-
 
         $this->sendMessage([
             'text' => StaticHelper::$helperMessage,
             'reply_markup' => [
-                'remove_keyboard'=>true
+                'remove_keyboard' => true
             ]
         ]);
 
     }
 
-   #[Pure] public static function trigger(Update $update, TeleBot $bot): bool
+    #[Pure] public static function trigger(Update $update, TeleBot $bot): bool
     {
         return isset($update->message->contact) && ($update->message->contact->user_id === $update->user()->id);
     }

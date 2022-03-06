@@ -9,7 +9,7 @@ use JetBrains\PhpStorm\ArrayShape;
 class SearchDrgService
 {
 
-    #[ArrayShape(['drg_people' => "mixed", 'cars' => "array"])]
+    #[ArrayShape(['drg_people' => "array", 'cars' => "array"])]
     public static function find($text): array
     {
 
@@ -24,7 +24,7 @@ class SearchDrgService
 
 
         return [
-            'drg_people' => $drgPeople,
+            'drg_people' => $drgPeople->toArray(),
             'cars' => [],
         ];
 
