@@ -2,6 +2,7 @@
 
 namespace App\Services\Drg;
 
+use App\Models\DrgCar;
 use App\Models\DrgPeople;
 use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\ArrayShape;
@@ -22,10 +23,14 @@ class SearchDrgService
             ->orWhereRaw('LOWER(address) like ?', array('%' . mb_strtolower($text) . '%'))
             ->orWhereRaw('LOWER(phones) like ?', array('%' . mb_strtolower($text) . '%'))->limit(10)->get();
 
+        $drgCars = DrgCar::whereRaw('LOWER(description) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->orWhereRaw('LOWER(number) like ?', array('%' . mb_strtolower($text) . '%'))
+            ->limit(10)->get();
+
 
         return [
             'drg_people' => $drgPeople->toArray(),
-            'cars' => [],
+            'cars' => $drgCars->toArray(),
         ];
 
     }

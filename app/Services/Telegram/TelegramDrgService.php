@@ -54,7 +54,40 @@ trait TelegramDrgService
 
 
     public function sendDrgCarsInfo($drg_cars){
-      //TODO
+
+        $this->sendMessage([
+            'text' => "Автомобілі\n".
+            "__________",
+            'reply_markup' => [
+                'remove_keyboard' => true
+            ],
+            'parse_mode' => 'HTML',
+            'disable_web_page_preview' => false,
+        ]);
+        foreach ($drg_cars as $item) {
+            $text = "Номер: " . $item['number'] . ",\n" .
+                "Примітка:" . $item['description'] . "\n";
+
+            if ($item['photo']) {
+                $this->sendPhoto([
+                    'photo' => asset($item['photo']),
+                    'caption' => $text,
+
+                    'reply_markup' => [
+                        'remove_keyboard' => true
+                    ],
+                ]);
+            } else {
+                $this->sendMessage([
+                    'text' => $text,
+                    'reply_markup' => [
+                        'remove_keyboard' => true
+                    ],
+                    'parse_mode' => 'HTML',
+                    'disable_web_page_preview' => false,
+                ]);
+            }
+        }
     }
     public function sendDrgPeopleNotFound(){
         $this->sendMessage([
